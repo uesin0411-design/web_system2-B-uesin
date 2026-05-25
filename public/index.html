@@ -1,0 +1,63 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+  <meta charset="UTF-8">
+  <title>災害データ収集システム</title>
+</head>
+<body>
+  <h1>災害データ収集システム - テスト画面</h1>
+  
+  <div style="margin-bottom: 20px;">
+    <h3>① センサーデータのテスト</h3>
+    <button onclick="sendSensorData()">センサーデータを送信 (POST)</button>
+    <button onclick="getSensorData()">センサーデータを取得 (GET)</button>
+  </div>
+
+  <div>
+    <h3>② 危険度データのテスト</h3>
+    <button onclick="sendRiskData()">危険度データを送信 (POST)</button>
+    <button onclick="getRiskData()">危険度データを取得 (GET)</button>
+  </div>
+
+  <script>
+    async function sendSensorData() {
+      const payload = { id: "1", location: "nagoya", water_level: 3.5 };
+      const response = await fetch('/api/sensors', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(payload)
+      });
+      const data = await response.json();
+      console.log("【POST: センサー】保存完了:", data);
+      alert("センサーデータを送信しました！(GETで確認できます)");
+    }
+
+    async function getSensorData() {
+      const response = await fetch('/api/sensors');
+      const data = await response.json();
+      console.log("【GET: センサー】取得した一覧:", data);
+      alert("コンソールに取得した一覧を出力しました！");
+    }
+
+    // --- 危険度データ ---
+    async function sendRiskData() {
+      const payload = { source: "気象庁API", type: "大雨警報" };
+      const response = await fetch('/api/risk-level', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(payload)
+      });
+      const data = await response.json();
+      console.log("【POST: 危険度】保存完了:", data);
+      alert("危険度データを送信しました！(GETで確認できます)");
+    }
+
+    async function getRiskData() {
+      const response = await fetch('/api/risk-level');
+      const data = await response.json();
+      console.log("【GET: 危険度】取得した一覧:", data);
+      alert("コンソールに取得した一覧を出力しました！");
+    }
+  </script>
+</body>
+</html>
