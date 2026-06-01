@@ -1,20 +1,20 @@
-//require('dotenv').config();
+require('dotenv').config();
 const express = require('express');
-//const { Pool } = require('pg');
+const { Pool } = require('pg');
 
 const app = express();
 app.use(express.json());
 app.use(express.static('public'));
 
-//const pool = new Pool({
-  //host:     process.env.DB_HOST,
-  //port:     process.env.DB_PORT,
-  //database: process.env.DB_NAME,
-  //user:     process.env.DB_USER,
-  //password: process.env.DB_PASSWORD,
-//});
+const pool = new Pool({
+  host:     process.env.DB_HOST,
+  port:     process.env.DB_PORT,
+  database: process.env.DB_NAME,
+  user:     process.env.DB_USER,
+  password: process.env.DB_PASSWORD,
+});
 
-// ルート1：トップページ
+ //ルート1：トップページ
 app.get('/', (req, res) => {
   res.send('トップページです');
 });
@@ -38,26 +38,24 @@ app.get('/status', (req, res) => {
 res.json({ status: 'ok',message: 'サーバーが動いています'});
 });
 
-//const messages = [];
-//ここは今回は関係ないので無効化
-// GET：メッセージ一覧を取得
-//app.get("/api/messages", async (req, res) => {
-  //const result = await pool.query(
-    //'SELECT * FROM messages ORDER BY created_at ASC'
-  //);
-  //res.json(result.rows);
-//});
+const messages = [];
+ //GET：メッセージ一覧を取得
+app.get("/api/messages", async (req, res) => {
+  const result = await pool.query(
+    'SELECT * FROM messages ORDER BY created_at ASC'
+  );
+  res.json(result.rows);
+});
 
 // POST：メッセージを追加
-//今回は使わないので無効化
-//app.post("/api/messages", async (req, res) => {
-  //const { username, text } = req.body;
-  //const result = await pool.query(
-    //'INSERT INTO messages (username, text) VALUES ($1, $2) RETURNING *',
-    //[username, text]
-  //);
-  //res.json(result.rows[0]);
-//});
+app.post("/api/messages", async (req, res) => {
+  const { username, text } = req.body;
+  const result = await pool.query(
+    'INSERT INTO messages (username, text) VALUES ($1, $2) RETURNING *',
+    [username, text]
+  );
+  res.json(result.rows[0]);
+});
 
 //ここから5-A
 
