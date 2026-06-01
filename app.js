@@ -97,4 +97,3 @@ app.get('/api/risk-level', (req, res) => {
 app.listen(process.env.PORT || 3000, () => {
   console.log(`サーバーが起動しました: http://localhost:${process.env.PORT || 3000}`);
 });
-

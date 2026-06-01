@@ -1,0 +1,58 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>タイトル</title>
+</head>
+<body>
+    <h1>メッセージー覧</h1>
+
+    <form id="form">
+        <input type="text" id="username" placeholder="名前" required>
+        <input type="text" id="text" placeholder="メッセージ" required>
+        <button type="submit"> 送信 </button>
+    </form>
+     
+    <ul id="messages"></ul>
+
+    <script>
+        async function getMessages() {
+            const response = await fetch('/api/messages');
+            const messages = await response.json();
+
+            const ul = document.getElementById('messages');
+            ul.innerHTML = '';
+            messages. forEach(msg => {
+                const li = document.createElement('li');
+                li.textContent = `${msg.username}: ${msg.text}`;
+                ul.appendChild(li);
+            });
+        }
+
+        async function sendMessage(username, text) {
+            const response = await fetch('/api/messages', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json'
+                },  
+                body: JSON.stringify({ username, text })
+            });
+            const data = await response.json();
+            console.log('送信完了:',data);
+            getMessages();// 投稿後に一覧を更新
+        } 
+        document.getElementById('form').addEventListener('submit', (event) => {
+            event.preventDefault();  //(1)
+            const username = document.getElementById('username').value;
+            const text     = document.getElementById('text').value;
+            sendMessage(username, text); //(2)
+            event.target.reset(); //(3)
+        });
+        setInterval(getMessages, 3000);  // 3秒ごとに自動更新
+        getMessages(); 
+
+    </script>
+   
+</body>
+</html>
