@@ -96,7 +96,7 @@ app.get('/api/risk-level', (req, res) => {
   res.json(riskDataList); 
 });
 
-app.listen(3000, () => {
-  console.log("サーバーが起動しました: http://localhost:3000");
+app.listen(process.env.PORT || 3000, () => {
+  console.log(`サーバーが起動しました: http://localhost:${process.env.PORT || 3000}`);
 });
 
