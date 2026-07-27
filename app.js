@@ -5,8 +5,8 @@ const { Pool } = require('pg');
 
 const app = express();
 app.use(express.json());
-app.use(express.static(path.join(__dirname, "frontend", "dist")));
-app.use(express.static('public'));
+app.use(express.static("frontend/dist"));
+//app.use(express.static('public'));
 
 
 const pool = new Pool({
