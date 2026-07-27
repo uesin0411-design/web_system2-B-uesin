@@ -1,10 +1,11 @@
+const path = require("path")
 require('dotenv').config();
 const express = require('express');
 const { Pool } = require('pg');
 
 const app = express();
 app.use(express.json());
-app.use(express.static("frontend/dist"));
+app.use(express.static(path.join(__dirname, "frontend", "dist")));
 app.use(express.static('public'));
 
 
@@ -99,3 +100,4 @@ app.get('/api/risk-level', (req, res) => {
 app.listen(process.env.PORT || 3000, () => {
   console.log(`サーバーが起動しました: http://localhost:${process.env.PORT || 3000}`);
 });
+
